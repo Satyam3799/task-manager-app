@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import type { ProjectRole } from "@prisma/client";
 
 export type JwtUser = { userId: string; email: string };
@@ -6,9 +6,10 @@ export type JwtUser = { userId: string; email: string };
 export function signAccessToken(params: {
   jwtSecret: string;
   user: JwtUser;
-  expiresIn: string;
+  expiresIn: jwt.SignOptions["expiresIn"];
 }) {
-  return jwt.sign(params.user, params.jwtSecret, { expiresIn: params.expiresIn });
+  const options: jwt.SignOptions = { expiresIn: params.expiresIn };
+  return jwt.sign(params.user, params.jwtSecret, options);
 }
 
 export function verifyAccessToken(params: { jwtSecret: string; token: string }): JwtUser {

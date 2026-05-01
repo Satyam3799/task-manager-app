@@ -13,7 +13,7 @@ tasksRouter.use(requireProjectRole("MEMBER"));
 
 tasksRouter.post("/", async (req, res) => {
   const userId = req.user!.userId;
-  const projectId = req.params.projectId;
+  const projectId = (req.params as any).projectId as string;
   const body = z
     .object({
       title: z.string().min(1),
@@ -58,8 +58,8 @@ tasksRouter.post("/", async (req, res) => {
 });
 
 tasksRouter.patch("/:taskId", async (req, res) => {
-  const projectId = req.params.projectId;
-  const taskId = req.params.taskId;
+  const projectId = (req.params as any).projectId as string;
+  const taskId = (req.params as any).taskId as string;
   const userId = req.user!.userId;
   const body = z
     .object({
@@ -121,8 +121,8 @@ tasksRouter.patch("/:taskId", async (req, res) => {
 });
 
 tasksRouter.delete("/:taskId", async (req, res) => {
-  const projectId = req.params.projectId;
-  const taskId = req.params.taskId;
+  const projectId = (req.params as any).projectId as string;
+  const taskId = (req.params as any).taskId as string;
   const userId = req.user!.userId;
   const existing = await prisma.task.findFirst({
     where: { id: taskId, projectId },

@@ -44,7 +44,7 @@ projectsRouter.post("/", async (req, res) => {
 });
 
 projectsRouter.get("/:projectId", requireProjectRole("MEMBER"), async (req, res) => {
-  const projectId = req.params.projectId;
+  const projectId = req.params.projectId as string;
   const project = await prisma.project.findUnique({
     where: { id: projectId },
     select: {
@@ -83,7 +83,7 @@ projectsRouter.post(
   "/:projectId/members",
   requireProjectRole("ADMIN"),
   async (req, res) => {
-    const projectId = req.params.projectId;
+    const projectId = req.params.projectId as string;
     const body = z
       .object({
         email: z.string().email(),
@@ -109,8 +109,8 @@ projectsRouter.delete(
   "/:projectId/members/:userId",
   requireProjectRole("ADMIN"),
   async (req, res) => {
-    const projectId = req.params.projectId;
-    const userIdToRemove = req.params.userId;
+    const projectId = req.params.projectId as string;
+    const userIdToRemove = req.params.userId as string;
     const requesterId = req.user!.userId;
 
     const requester = await prisma.projectMember.findUnique({
